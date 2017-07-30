@@ -237,7 +237,8 @@ export default {
   props: {
     defaultSelection: [String, Number, Date],
     disable: Boolean,
-    readonly: Boolean
+    readonly: Boolean,
+    yearMonthDay: Boolean
   },
   components: {
     QIcon,
@@ -249,11 +250,13 @@ export default {
   data () {
     let view
 
-    switch (this.type) {
-      case 'time':
+    switch (true) {
+      case this.type === 'time':
         view = 'hour'
         break
-      case 'date':
+      case this.type === 'date' && this.yearMonthDay:
+        view = 'year'
+        break
       default:
         view = 'day'
         break
@@ -264,6 +267,13 @@ export default {
       dragging: false,
       centerClockPos: 0
     }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      if (this.yearMonthDay) {
+        this.view = 'year'
+      }
+    })
   },
   watch: {
     value (val) {
@@ -276,13 +286,7 @@ export default {
         return
       }
 
-      let
-        view = this.$refs.selector,
-        rows = value === 'year' ? this.year - this.yearMin : this.month - this.monthMin
-
-      this.$nextTick(() => {
-        view.scrollTop = rows * height(view.children[0].children[0]) - height(view) / 2.5
-      })
+      this.scrollToSelection()
     }
   },
   computed: {
@@ -378,10 +382,19 @@ export default {
     }
   },
   methods: {
+    scrollToSelection () {
+      let
+        view = this.$refs.selector,
+        rows = this.view === 'year' ? this.year - this.yearMin : this.month - this.monthMin
+
+      this.$nextTick(() => {
+        view.scrollTop = rows * height(view.children[0].children[0]) - height(view) / 2.5
+      })
+    },
     /* date */
     setYear (value) {
       if (this.editable) {
-        this.view = 'day'
+        this.yearMonthDay ? this.view = 'month' : this.view = 'day'
         this.model = new Date(this.model.setFullYear(this.__parseTypeValue('year', value)))
       }
     },

@@ -46,6 +46,7 @@
         :month-names="monthNames"
         :day-names="dayNames"
         :color="color"
+        :year-month-day="yearMonthDay"
         class="no-border"
       >
         <div class="row q-datetime-controls modal-buttons-top">
@@ -83,6 +84,7 @@
         :month-names="monthNames"
         :day-names="dayNames"
         :color="color"
+        :year-month-day="yearMonthDay"
         class="no-border"
         :class="{'full-width': $q.theme === 'ios'}"
       >
@@ -193,6 +195,7 @@ export default {
       if (!this.disable) {
         this.__setModel()
         this.$refs.popup.open()
+        this.$refs.target.scrollToSelection()
       }
     },
     close (fn) {

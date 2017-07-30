@@ -46,7 +46,8 @@ export const inline = {
   },
   mondayFirst: Boolean,
   saturdayFirst: Boolean,
-  format24h: Boolean
+  format24h: Boolean,
+  yearMonthDay: Boolean
 }
 
 export const input = {
